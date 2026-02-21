@@ -32,5 +32,42 @@
  *   calculateAutoFare(-2)   // => -1
  */
 export function calculateAutoFare(distance, waitingMinutes = 0) {
-  // Your code here
+  if (
+    distance <= 0 ||
+    waitingMinutes < 0 ||
+    typeof distance === "undefined" ||
+    isNaN(distance)
+  ) {
+    return -1;
+  }
+
+  let fare = 0;
+  let roundDistance = Math.ceil(distance);
+  //  console.log(roundDistance)
+
+  while (roundDistance > 0) {
+    //  console.log(roundDistance)
+    //  console.log(fare)
+    //  console.log("____________________________________")
+
+    if (roundDistance === Math.ceil(distance)) {
+      fare += 30;
+    } else if (roundDistance >= 5) {
+      fare += 10;
+      // console.log(fare)
+    } else fare += 15;
+    roundDistance--;
+  }
+  //   console.log(fare);
+
+  while (waitingMinutes > 0) {
+    // console.log(waitingMinutes);
+    // console.log(fare);
+    // console.log("____________________________________");
+    fare += 5;
+    waitingMinutes -= 2;
+  }
+  //   console.log(fare);
+  return fare;
 }
+calculateAutoFare(7, 4);

@@ -34,5 +34,47 @@
  *   // => { totalBatches: 3, totalPlates: 15, ordersProcessed: 2 }
  */
 export function biryaniBatchProcessor(orders) {
-  // Your code here
+  if (!Array.isArray(orders) || orders.length === 0) {
+    return { totalBatches: 0, totalPlates: 0, ordersProcessed: 0 };
+  }
+
+  let totalBatches = 0;
+  let totalPlates = 0;
+  let ordersProcessed = 0;
+  let i = 0;
+  let remaining = 0;
+
+  do {
+    if (isNaN(orders[i]) || !Number.isInteger(orders[i]) || orders[i] <= 0) {
+      i++;
+    } else {
+      ordersProcessed++;
+      totalPlates += orders[i];
+      if (orders[i] <= 5) {
+        // console.log("orders", orders[i]);
+        totalBatches++;
+      } else {
+        // console.log("orders else", orders[i]);
+        remaining = orders[i];
+        while (remaining > 0) {
+          // console.log("remaining", remaining);
+          remaining = remaining - 5;
+          totalBatches++;
+        }
+      }
+      i++;
+    }
+  } while (i < orders.length);
+  // console.log(totalBatches);
+  // console.log(totalPlates);
+  // console.log(ordersProcessed);
+  if (totalBatches === 0 || totalPlates === 0 || ordersProcessed === 0) {
+    return { totalBatches: 0, totalPlates: 0, ordersProcessed: 0 };
+  }
+  return {
+    totalBatches: totalBatches,
+    totalPlates: totalPlates,
+    ordersProcessed: ordersProcessed,
+  };
 }
+biryaniBatchProcessor([5, 10]);

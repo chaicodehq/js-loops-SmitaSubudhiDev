@@ -37,5 +37,78 @@
  *   // Sorted: CSK(3), RCB(1), MI(0)
  */
 export function iplPointsTable(matches) {
-  // Your code here
+  if (matches===null||matches.length === 0 || !Array.isArray(matches)) {
+    return [];
+  }
+  var array = [];
+  let table = {};
+  var emptyobject = {
+    team: 0,
+    played: 0,
+    won: 0,
+    lost: 0,
+    tied: 0,
+    noResult: 0,
+    points: 0,
+  };
+  for (let index = 0; index < matches.length; index++) {
+    const match = matches[index];
+    const team1 = match.team1;
+    const team2 = match.team2;
+    if (!table[team1]) {
+      table[team1] = {
+        team: team1,
+        played: 0,
+        won: 0,
+        lost: 0,
+        tied: 0,
+        noResult: 0,
+        points: 0,
+      };
+    }
+    if (!table[team2]) {
+      table[team2] = {
+        team: team2,
+        played: 0,
+        won: 0,
+        lost: 0,
+        tied: 0,
+        noResult: 0,
+        points: 0,
+      };
+    }
+
+    table[team1].played++;
+    table[team2].played++;
+    if (match.result === "win") {
+      const winner = match.winner;
+      const loser = winner === team1 ? team2 : team1;
+
+      table[winner].won++;
+      table[winner].points += 2;
+      table[loser].lost++;
+    } else if (match.result === "tie") {
+      table[team1].tied++;
+      table[team2].tied++;
+      table[team1].points += 1;
+      table[team2].points += 1;
+    } else if (match.result === "no_result") {
+      table[team1].noResult++;
+      table[team2].noResult++;
+      table[team1].points += 1;
+      table[team2].points += 1;
+    }
+  }
+  const result = Object.values(table);
+  result.sort((a, b) => {
+    if (b.points !== a.points) return b.points - a.points;
+    return a.team.localeCompare(b.team);
+  });
+  console.log(result)
+
+  return result;
 }
+iplPointsTable([
+  { team1: "CSK", team2: "MI", result: "win", winner: "CSK" },
+  { team1: "RCB", team2: "CSK", result: "tie" },
+]);

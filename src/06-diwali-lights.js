@@ -37,6 +37,42 @@
  *   // remove white (550-300=250), 250 <= 400
  *   // => { selected: [{ color: "golden", length: 5, cost: 250 }], totalLength: 5, totalCost: 250 }
  */
-export function diwaliLightsPlan(lightStrings, budget) {
-  // Your code here
+function getRate(string) {
+  switch (string) {
+    case "golden":
+      return 50;
+    case "multicolor":
+      return 40;
+    case "white":
+      return 30;
+    default:
+      return 35;
+  }
 }
+
+export function diwaliLightsPlan(lightStrings, budget) {
+  if (!Array.isArray(lightStrings) || budget <= 0 || typeof budget!="number") {
+    return { selected: [], totalLength: 0, totalCost: 0 };
+  }
+  let totalLength = 0;
+  let selected = [];
+  let totalcost = 0;
+  for (const light of lightStrings) {
+    let gstrate = getRate(light.color);
+    totalLength += light.length;
+    totalcost += light.length * gstrate;
+    selected.push({
+      color: light.color,
+      length: light.length,
+      cost: light.length * gstrate,
+    });
+  }
+  while (totalcost >= budget) {
+      let lstItem = selected.pop();
+       totalcost -= lstItem.cost;
+       totalLength-=lstItem.length;
+  }
+
+  return { selected: selected, totalLength: totalLength, totalCost: totalcost };
+}
+

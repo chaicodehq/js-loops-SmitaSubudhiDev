@@ -42,5 +42,46 @@
  *   // => { months: -1, totalPaid: -1, totalInterest: -1 }
  */
 export function calculateEMI(principal, monthlyRate, emi) {
-  // Your code here
+  if (principal <= 0 || monthlyRate < 0 || emi < 0 || isNaN(principal)) {
+    return { months: -1, totalPaid: -1, totalInterest: -1 };
+  }
+  let intrest = 0;
+  let month = 0;
+  let remaining = principal;
+  let totalpaid = 0;
+  let totalintrest = 0;
+  if (emi <= principal * monthlyRate) {
+    return { months: -1, totalPaid: -1, totalInterest: -1 };
+  }
+  while (remaining > 0) {
+    if (remaining < emi) {
+      intrest = remaining * monthlyRate;
+      totalpaid += remaining + intrest;
+      remaining = 0;
+      totalintrest += intrest;
+      month++;
+      break;
+    }
+
+    intrest = remaining * monthlyRate;
+    remaining = remaining + intrest;
+    remaining = remaining - emi;
+    month++;
+    totalpaid += emi;
+    totalintrest += intrest;
+    // console.log("remaining",remaining)
+  }
+  // console.log("intrest", intrest);
+  // console.log("month", month);
+  // // console.log("remaining", remaining);
+  // console.log("totalintrest", totalintrest);
+  // console.log("totalpaid", totalpaid);
+  // console.log("remaining", remaining);
+  return {
+    months: month,
+    totalPaid: totalpaid,
+    totalInterest: parseFloat(totalintrest.toFixed(2)),
+  };
 }
+
+calculateEMI(1000, 0.01, 600);

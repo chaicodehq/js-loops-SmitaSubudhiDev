@@ -33,6 +33,30 @@
  *   // 150: 300+150=450 > 400, STOP.
  *   // => { count: 2, totalDuration: 300 }
  */
+
 export function buildPlaylist(songs, maxDuration) {
-  // Your code here
+  if (!Array.isArray(songs) || maxDuration < 0) {
+    return { count: 0, totalDuration: 0 };
+  }
+  let duration = 0;
+  let count = 0;
+  let songIndex = 0;
+
+  let filteredArray = songs.filter((item) => {
+    if (item > 0 && typeof item === "number" && !isNaN(item)) {
+      return item;
+    }
+  });
+  while (filteredArray.length != songIndex && maxDuration > duration) {
+    let nextvalue = filteredArray[songIndex];
+    if (duration + nextvalue > maxDuration) {
+      break;
+    }
+    duration += filteredArray[songIndex];
+    count++;
+    songIndex++;
+  }
+  return { count: count, totalDuration: duration };
 }
+
+// buildPlaylist([100, "song", 200], 400);

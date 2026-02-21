@@ -45,5 +45,80 @@
  *   // => [{ name: "Rahul", trainNumber: "12345", class: "sleeper", status: "confirmed" }]
  */
 export function railwayReservation(passengers, trains) {
-  // Your code here
+  if (
+    !Array.isArray(passengers) ||
+    !Array.isArray(trains) ||
+    passengers.length === 0 ||
+    trains.length === 0
+  ) {
+    return [];
+  }
+  var arrayofobject = [];
+  for (let i = 0; i < passengers.length; i++) {
+    let trainfound = false;
+    for (let j = 0; j < trains.length; j++) {
+      if (passengers[i].trainNumber === trains[j].trainNumber) {
+        trainfound = true;
+        let preferedcoach = passengers[i].preferred;
+        let fallbackcoach = passengers[i].fallback;
+        let name = passengers[i].name;
+        if (trains[j].seats[preferedcoach] > 0) {
+          trains[j].seats[preferedcoach] = trains[j].seats[preferedcoach] - 1;
+          arrayofobject.push({
+            name: passengers[i].name,
+            trainNumber: passengers[i].trainNumber,
+            class: passengers[i].preferred,
+            status: "confirmed",
+          });
+          // console.log(arrayofobject);
+        } else if (trains[j].seats[fallbackcoach] > 0) {
+          trains[j].seats[fallbackcoach] = trains[j].seats[fallbackcoach] - 1;
+          arrayofobject.push({
+            name: passengers[i].name,
+            trainNumber: passengers[i].trainNumber,
+            class: passengers[i].fallback,
+            status: "confirmed",
+          });
+          // console.log(object);
+        } else {
+          arrayofobject.push({
+            name: passengers[i].name,
+            trainNumber: passengers[i].trainNumber,
+            class: passengers[i].preferred,
+            status: "waitlisted",
+          });
+          // console.log(object);
+        }
+
+        break;
+
+        // console.log(object);
+      }
+    }
+    if (!trainfound) {
+      arrayofobject.push({
+        name: passengers[i].name,
+        trainNumber: passengers[i].trainNumber,
+        class: null,
+        status: "train_not_found",
+      });
+    }
+  }
+  // console.log(arrayofobject);
+
+  return arrayofobject;
 }
+const trains = [
+  { trainNumber: "12301", name: "Rajdhani", seats: { ac3: 1, sleeper: 2 } },
+  {
+    trainNumber: "12951",
+    name: "Mumbai Rajdhani",
+    seats: { ac3: 1, sleeper: 3 },
+  },
+];
+const passengers = [
+  { name: "A", trainNumber: "12301", preferred: "ac3", fallback: "sleeper" },
+  { name: "B", trainNumber: "12951", preferred: "ac3", fallback: "sleeper" },
+  { name: "C", trainNumber: "12301", preferred: "ac3", fallback: "sleeper" },
+];
+railwayReservation(passengers, trains);
